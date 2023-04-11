@@ -29,6 +29,7 @@ public class NominaTrabajadorModel {
     @Column(name = "cantidad_retardos",nullable = false)
     private int retardo_trabajador;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador",nullable = false)
     private TrabajadorModel trabajadorModel;
