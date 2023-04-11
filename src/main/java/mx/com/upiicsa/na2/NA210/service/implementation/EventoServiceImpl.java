@@ -42,13 +42,8 @@ public class EventoServiceImpl implements IEventoService {
     }
 
     @Override
-    public Optional<EventoModel> findEvento(long id_gerente, long id_evento) {
+    public Optional<EventoModel> findEvento(long id_evento) {
         Optional<EventoModel> oEvento = iEvento.findById(id_evento);
-        Optional<GerenteModel> oGerente = iGerente.findById(id_evento);
-
-        if(oEvento.get().getGerenteModel().getId() != oGerente.get().getId()){
-            return null;
-        }
         return oEvento;
     }
 

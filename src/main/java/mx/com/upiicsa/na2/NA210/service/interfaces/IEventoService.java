@@ -11,7 +11,7 @@ public interface IEventoService {
 
     List<EventoModel> findAllEventosGerenteID(long id_gerente);
 
-    Optional<EventoModel> findEvento(long id_gerente, long id_evento);
+    Optional<EventoModel> findEvento(long id_evento);
 
     void updateEvento(long id_gerente,EventoModel eventoModel);
 
