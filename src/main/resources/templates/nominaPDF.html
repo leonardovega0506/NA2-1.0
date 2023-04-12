@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Recibos de Nomina</title>
+    <style type="text/css">
+h1 {
+	text-align: left;
+}
+#apDiv1 {
+	position: absolute;
+	left: 487px;
+	top: 24px;
+	width: 73px;
+	height: 70px;
+	z-index: 1;
+}
+#apDiv2 {
+	position: absolute;
+	left: 21px;
+	top: 16px;
+	width: 555px;
+	height: 117px;
+	z-index: 2;
+}
+#apDiv3 {
+	position: absolute;
+	left: 135px;
+	top: 30px;
+	width: 312px;
+	height: 79px;
+	z-index: 3;
+}
+#apDiv4 {
+	position: absolute;
+	left: 11px;
+	top: 11px;
+	width: 74px;
+	height: 71px;
+	z-index: 1;
+}
+#apDiv5 {
+	position: absolute;
+	left: 14px;
+	top: 182px;
+	width: 563px;
+	height: 152px;
+	z-index: 4;
+}
+#apDiv6 {
+	position: absolute;
+	left: 32px;
+	top: 196px;
+	width: 217px;
+	height: 26px;
+	z-index: 5;
+}
+#apDiv7 {
+	position: absolute;
+	left: 20px;
+	top: 56px;
+	width: 217px;
+	height: 26px;
+	z-index: 5;
+}
+#apDiv8 {
+	position: absolute;
+	left: 286px;
+	top: 196px;
+	width: 217px;
+	height: 26px;
+	z-index: 5;
+}
+#apDiv9 {
+	position: absolute;
+	left: 21px;
+	top: 102px;
+	width: 217px;
+	height: 26px;
+	z-index: 5;
+}
+#apDiv10 {
+	position: absolute;
+	left: 285px;
+	top: 242px;
+	width: 217px;
+	height: 26px;
+	z-index: 5;
+}
+#apDiv11 {
+	position: absolute;
+	left: 20px;
+	top: 402px;
+	width: 570px;
+	height: 130px;
+	z-index: 6;
+	background-color: #FFFFFF;
+}
+#apDiv11 table tr th {
+	color: #333;
+}
+table {
+	color: #333;
+}
+#apDiv11 table tr th {
+	color: #FFF;
+}
+#apDiv11 table tr th {
+	color: #333;
+}
+tr {
+	color: #333;
+}
+</style>
+</head>
+
+<body>
+<div id="apDiv1"></div>
+<div id="apDiv2">
+    <div id="apDiv4"></div>
+</div>
+<div id="apDiv3">
+    <h1>Estado de Cuenta</h1>
+</div>
+<div id="apDiv5">
+    <div id="apDiv7">RFC: <span th:text="${trabajador.rfc}"></span></div>
+    <div id="apDiv9">NSS: <span th:text="${trabajador.nss}"></span></div>
+    <h3></h3>
+</div>
+<div id="apDiv6">Nombre del Empleado: <span th:text="${trabajador.nombre_trabajador}"></span></div>
+<div id="apDiv8">CURP: <span th:text="${trabajador.curp}"></span></div>
+<div id="apDiv10">Puesto en la Empresa: <span th:text="${trabajador.puesto}"></span></div>
+<div id="apDiv11">
+    <table width="627" height="89" border="1">
+        <tr bgcolor="#0066FF">
+            <th width="107" scope="col">Fecha</th>
+            <th width="168" scope="col">Concepto</th>
+            <th width="178" scope="col">Sueldo Bruto</th>
+            <th width="177" scope="col">Descuentos Retardos</th>
+            <th width="106" scope="col">ISR</th>
+            <th width="194" scope="col">Sueldo Neto</th>
+        </tr>
+        <tr th:each="nomina:${nominas}">
+            <td th:text="${nomina.fechaNomina}"></td>
+            <td>Pago Nomina</td>
+            <td th:text="${nomina.trabajadorModel.sueldo}"></td>
+            <td th:text="${nomina.descuento_retardo}"></td>
+            <td th:text="${nomina.isr}"></td>
+            <td th:text="${nomina.nomina_trabajador}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

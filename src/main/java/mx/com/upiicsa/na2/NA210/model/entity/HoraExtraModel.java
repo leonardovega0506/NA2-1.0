@@ -1,5 +1,6 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,5 +29,6 @@ public class HoraExtraModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador", nullable = false)
+    @JsonIgnore
     private TrabajadorModel trabajadorModel;
 }

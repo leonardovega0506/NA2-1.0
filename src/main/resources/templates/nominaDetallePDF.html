@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Recibo Nomina</title>
+  <style type="text/css">
+#apDiv1 {
+	position: absolute;
+	left: 11px;
+	top: 13px;
+	width: 388px;
+	height: 109px;
+	z-index: 1;
+}
+#apDiv2 {
+	position: absolute;
+	left: 17px;
+	top: 86px;
+	width: 365px;
+	height: 30px;
+	z-index: 2;
+}
+#apDiv3 {
+	position: absolute;
+	left: 424px;
+	top: 14px;
+	width: 316px;
+	height: 107px;
+	z-index: 3;
+}
+#apDiv4 {
+	position: absolute;
+	left: 425px;
+	top: 17px;
+	width: 146px;
+	height: 100px;
+	z-index: 4;
+}
+#apDiv5 {
+	position: absolute;
+	left: 430px;
+	top: 43px;
+	width: 135px;
+	height: 73px;
+	z-index: 5;
+}
+#apDiv6 {
+	position: absolute;
+	left: 575px;
+	top: 21px;
+	width: 155px;
+	height: 91px;
+	z-index: 6;
+}
+#apDiv7 {
+	position: absolute;
+	left: 583px;
+	top: 47px;
+	width: 139px;
+	height: 59px;
+	z-index: 7;
+}
+#apDiv8 {
+	position: absolute;
+	left: 14px;
+	top: 146px;
+	width: 367px;
+	height: 30px;
+	z-index: 8;
+}
+#apDiv9 {
+	position: absolute;
+	left: 15px;
+	top: 178px;
+	width: 423px;
+	height: 206px;
+	z-index: 9;
+}
+#apDiv10 {
+	position: absolute;
+	left: 205px;
+	top: 179px;
+	width: 224px;
+	height: 175px;
+	z-index: 10;
+}
+#apDiv11 {
+	position: absolute;
+	left: 482px;
+	top: 170px;
+	width: 241px;
+	height: 237px;
+	z-index: 11;
+}
+#apDiv12 {
+	position: absolute;
+	left: 71px;
+	top: 434px;
+	width: 623px;
+	height: 116px;
+	z-index: 12;
+}
+</style>
+</head>
+
+<body>
+<div id="apDiv1">
+  <h1>Empresa S.A. de C.V</h1>
+</div>
+<div id="apDiv2">CFDI de Nómina</div>
+<div id="apDiv3"></div>
+<div id="apDiv4">Tipo de Nomina</div>
+<div id="apDiv5">Sueldo</div>
+<div id="apDiv6">Fecha</div>
+<div id="apDiv7" th:text="${nomina.fechaNomina}"></div>
+<div id="apDiv8">Empleado</div>
+<div id="apDiv9">
+  <p>Nombre <span th:text="${trabajador.nombre_trabajador}"> <span th:text="${trabajador.apellidoP_trabajador}"></span></span></p>
+  <p>Puesto <span th:text="${trabajador.puesto}"></span></p>
+  <p th:text="RFC    + ${trabajador.rfc}"> </p>
+</div>
+<div id="apDiv10">
+  <p>CURP <span th:text="${trabajador.curp}"></span></p>
+</div>
+<div id="apDiv11">
+  <p>Num. Seg Social: <span th:text="${trabajador.nss}"></span></p>
+  <p>Fecha de Ingreso: <span th:text="${trabajador.fechaIngreso}"></span></p>
+</div>
+<div id="apDiv12">
+  <table width="570" border="1">
+    <tr>
+      <th width="93" scope="col">Percepcion</th>
+      <th width="55" scope="col">Monto</th>
+      <th width="150" scope="col">Retencion</th>
+      <th width="113" scope="col">Saldo</th>
+    </tr>
+    <tr>
+      <td>Sueldo</td>
+      <td th:text="${trabajador.sueldo}"></td>
+      <td th:text="${nomina.isr}"></td>
+      <td th:text="${nomina.nomina_trabajador}"></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

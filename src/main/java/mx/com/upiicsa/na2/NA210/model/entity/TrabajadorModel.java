@@ -1,8 +1,10 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +26,12 @@ public class TrabajadorModel {
     @Column(name = "apellidoP_trabajor",nullable = false)
     private String apellidoP_trabajador;
 
+    private String rfc;
+
+    private String nss;
+
+    private String curp;
+
     @Column(name = "apellidoM_trabajador",nullable = false)
     private String apellidoM_trabajador;
 
@@ -32,6 +40,8 @@ public class TrabajadorModel {
 
     @Column(name = "estatus_trabajador",nullable = false)
     private String estatus;
+
+    private LocalDate fechaIngreso;
 
     @Column(name = "celular_trabajador",nullable = false)
     private String celular;
@@ -42,27 +52,35 @@ public class TrabajadorModel {
     @Column(name = "puesto_trabajador",nullable = false)
     private String puesto;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<TareaModel> tareas = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<RetradoTrabajadorModel> retardos = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<QuejasAclaracionesModel> listaQuejas = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<HoraExtraModel> listaHorasExtra = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<IncidenciaModel> listaIncidencias = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<NominaTrabajadorModel> listaNominas = new HashSet<>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private RenunciaTrabajadorModel renuncia;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<VacacionModel> listaVacaciones = new HashSet<>();
 }

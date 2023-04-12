@@ -1,5 +1,6 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class EventoModel {
     private String cuerpo_evento;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name = "id_gerente", nullable = false)
     private GerenteModel gerenteModel;
 

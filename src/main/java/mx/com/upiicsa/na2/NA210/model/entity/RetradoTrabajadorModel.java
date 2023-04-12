@@ -1,5 +1,6 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,5 +26,6 @@ public class RetradoTrabajadorModel {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trabajador_id")
+    @JsonIgnore
     private TrabajadorModel trabajadorModel;
 }

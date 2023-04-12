@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface INominaService {
-    NominaTrabajadorModel createNomina(long id_trabajador, NominaTrabajadorModel nominaDTO);
+    NominaTrabajadorModel createNomina(long id_trabajador);
 
     List<NominaTrabajadorModel> findAllNominasTrabajador(long id_trabajador);
 

@@ -1,6 +1,7 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class VacacionModel {
     @Column(name = "cantidad_dias_vacaciones",nullable = false)
     private int cantidad_dias;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador",nullable = false)
     private TrabajadorModel trabajadorModel;
