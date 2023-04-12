@@ -1,7 +1,7 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
-import mx.com.snreh.dto.VacacionesDTO;
-import mx.com.snreh.service.interfaces.VacacionesService;
+import mx.com.upiicsa.na2.NA210.model.entity.VacacionModel;
+import mx.com.upiicsa.na2.NA210.service.interfaces.IVacacionesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,36 +15,35 @@ import java.util.List;
 public class VacacionController {
 
     @Autowired
-    private VacacionesService sVacaciones;
+    private IVacacionesService sVacaciones;
 
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/vacaciones/")
-    public List<VacacionesDTO> listarVacacionesTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
-        return sVacaciones.findAllVacacionesTrabajador(id_trabajador);
+    @GetMapping("/na2/trabajadores/{id_trabajador}/vacaciones/")
+    public ResponseEntity<?> listarVacacionesTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
+        return new ResponseEntity<>(sVacaciones.findAllVacacionesTrabajador(id_trabajador),HttpStatus.OK);
     }
 
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/vacaciones/{id_vacaciones}")
-    public ResponseEntity<VacacionesDTO> obtenerVacacion(@PathVariable(value = "id_trabajador") long id_trabajador, @PathVariable(value = "id_vacaciones") long id_vacaciones){
-        VacacionesDTO vacacionesDTO = sVacaciones.findVacaciones(id_trabajador,id_vacaciones);
-        return new ResponseEntity<>(vacacionesDTO, HttpStatus.OK);
+    @GetMapping("/na2/trabajadores/{id_trabajador}/vacaciones/{id_vacaciones}")
+    public ResponseEntity<?> obtenerVacacion(@PathVariable(value = "id_vacaciones") long id_vacaciones){
+        return new ResponseEntity<>(sVacaciones.findVacaciones(id_vacaciones), HttpStatus.OK);
     }
-    @GetMapping("/snrhe/vacaciones/")
-    public List<VacacionesDTO> listarVacaciones(){
-        return sVacaciones.findAllVacaciones();
+    @GetMapping("/na2/vacaciones/")
+    public ResponseEntity<?> listarVacaciones(){
+        return new ResponseEntity<>(sVacaciones.findAllVacaciones(),HttpStatus.OK);
     }
 
-    @PostMapping("/snrhe/trabajadores/{id_trabajador}/vacaciones/")
-    public ResponseEntity<VacacionesDTO> generarVacaciones(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody VacacionesDTO vacacionesDTO){
+    @PostMapping("/na2/trabajadores/{id_trabajador}/vacaciones/")
+    public ResponseEntity<?> generarVacaciones(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody VacacionModel vacacionesDTO){
         return new ResponseEntity<>(sVacaciones.createVacacion(id_trabajador,vacacionesDTO),HttpStatus.CREATED);
     }
 
-    @PutMapping("/snrhe/trabajadores/{id_trabajador}/vacaciones/{id_vacaciones}")
-    public ResponseEntity<VacacionesDTO> actualizarVacaciones(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_vacaciones") long id_vacaciones,@Valid @RequestBody VacacionesDTO vacacionesDTO){
-        VacacionesDTO vacacionActualizada = sVacaciones.updateVacaciones(id_trabajador,id_vacaciones,vacacionesDTO);
-        return new ResponseEntity<>(vacacionActualizada,HttpStatus.NO_CONTENT);
+    @PutMapping("/na2/vacaciones/{id_vacaciones}")
+    public ResponseEntity<?> actualizarVacaciones(@Valid @RequestBody VacacionModel vacacionesDTO){
+        sVacaciones.updateVacaciones(vacacionesDTO);
+        return new ResponseEntity<>("vacacionActualizada",HttpStatus.NO_CONTENT);
     }
-    @DeleteMapping("/snrhe/trabajadores/{id_trabajador}/vacaciones/{id_vacaciones}")
-    public ResponseEntity<String> borrarVacaciones(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_vacaciones") long id_vacaciones){
-        sVacaciones.deleteVacaciones(id_trabajador,id_vacaciones);
+    @DeleteMapping("/na2/trabajadores/{id_trabajador}/vacaciones/{id_vacaciones}")
+    public ResponseEntity<String> borrarVacaciones(@PathVariable(value = "id_vacaciones") long id_vacaciones){
+        sVacaciones.deleteVacaciones(id_vacaciones);
         return new ResponseEntity<>("Vacaciones eliminadas con exito",HttpStatus.NO_CONTENT);
     }
 }

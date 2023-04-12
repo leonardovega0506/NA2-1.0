@@ -25,23 +25,23 @@ public class EventoController {
     public ResponseEntity<?> obtenerEventoById(@PathVariable(value = "id_evento") long id_evento){
         return new ResponseEntity<>(sEvento.findEvento(id_evento), HttpStatus.OK);
     }
-    @GetMapping("/snrhe/eventos/")
+    @GetMapping("/na2/eventos/")
     public  ResponseEntity<?> listarEventos(){
         return new ResponseEntity<>(sEvento.findAllEventos(),HttpStatus.OK);
     }
 
-    @PostMapping("/snrhe/gerentes/{id_gerente}/eventos/")
-    public ResponseEntity<EventoDTO> crearEvento(@PathVariable(value = "id_gerente")long id_gerente,@Valid @RequestBody EventoDTO eventoDTO){
+    @PostMapping("/na2/gerentes/{id_gerente}/eventos/")
+    public ResponseEntity<EventoModel> crearEvento(@PathVariable(value = "id_gerente")long id_gerente,@Valid @RequestBody EventoModel eventoDTO){
         return new ResponseEntity<>(sEvento.createEvento(id_gerente,eventoDTO),HttpStatus.CREATED);
     }
-    @PutMapping("/snrhe/gerentes/{id_gerente}/eventos/{id_evento}")
-    public ResponseEntity<EventoDTO> actualizarEvento(@PathVariable(value = "id_gerente") long id_gerente, @PathVariable("id_evento") long id_evento, @Valid @RequestBody EventoDTO eventoDTO){
-        EventoDTO eventoActualizado = sEvento.updateEvento(id_gerente, id_evento, eventoDTO);
-        return new ResponseEntity<>(eventoActualizado,HttpStatus.NO_CONTENT);
+    @PutMapping("/na2/gerentes/{id_gerente}/eventos/")
+    public ResponseEntity<?> actualizarEvento(@PathVariable(value = "id_gerente") long id_gerente, @PathVariable("id_evento") long id_evento, @Valid @RequestBody EventoModel eventoDTO){
+         sEvento.updateEvento(id_gerente, eventoDTO);
+        return new ResponseEntity<>("eventoActualizado",HttpStatus.NO_CONTENT);
     }
-    @DeleteMapping("/snrhe/gerentes/{id_gerente}/eventos/{id_evento}")
-    public ResponseEntity<String> borrarEvento(@PathVariable(value = "id_gerente") long id_gerente,@PathVariable("id_evento") long id_evento){
-        sEvento.deleteEvento(id_gerente, id_evento);
+    @DeleteMapping("/na2/eventos/{id_evento}")
+    public ResponseEntity<?> borrarEvento(@PathVariable("id_evento") long id_evento){
+        sEvento.deleteEvento( id_evento);
         return new ResponseEntity<>("Comentario eliminado con exito",HttpStatus.NO_CONTENT);
     }
 

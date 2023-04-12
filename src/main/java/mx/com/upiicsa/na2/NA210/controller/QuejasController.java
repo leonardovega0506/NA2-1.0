@@ -1,7 +1,7 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
-import mx.com.snreh.dto.QuejasDTO;
-import mx.com.snreh.service.interfaces.QuejaService;
+import mx.com.upiicsa.na2.NA210.model.entity.QuejasAclaracionesModel;
+import mx.com.upiicsa.na2.NA210.service.interfaces.IQuejaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,34 +14,33 @@ import java.util.List;
 @RequestMapping()
 public class QuejasController {
     @Autowired
-    private QuejaService sQueja;
+    private IQuejaService sQueja;
 
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/quejas/")
-    public List<QuejasDTO> listarQuejasTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
-        return sQueja.findAllQuejasTrabajador(id_trabajador);
+    @GetMapping("/na2/trabajadores/{id_trabajador}/quejas/")
+    public ResponseEntity<?> listarQuejasTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
+        return new ResponseEntity<>(sQueja.findAllQuejasTrabajador(id_trabajador),HttpStatus.OK);
     }
 
-    @GetMapping("/snrhe/quejas/")
-    public List<QuejasDTO> listarQuejas(){
-        return sQueja.findAllQuejas();
+    @GetMapping("/na2/quejas/")
+    public ResponseEntity<?> listarQuejas(){
+        return new ResponseEntity<>(sQueja.findAllQuejas(),HttpStatus.OK);
     }
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/quejas/{id_queja}")
-    public ResponseEntity<QuejasDTO> obtenerQuejaByID(@PathVariable(value = "id_trabajador") long id_trabajador, @PathVariable(value = "id_queja") long id_queja){
-        QuejasDTO quejasDTO = sQueja.findQueja(id_trabajador,id_queja);
-        return new ResponseEntity<>(quejasDTO, HttpStatus.OK);
+    @GetMapping("/na2/quejas/{id_queja}")
+    public ResponseEntity<?> obtenerQuejaByID(@PathVariable(value = "id_queja") long id_queja){
+        return new ResponseEntity<>(sQueja.findQueja(id_queja), HttpStatus.OK);
     }
-    @PostMapping("/snrhe/trabajadores/{id_trabajador}/quejas/")
-    public ResponseEntity<QuejasDTO> crearQueja(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody QuejasDTO quejasDTO){
+    @PostMapping("/na2/trabajadores/{id_trabajador}/quejas/")
+    public ResponseEntity<?> crearQueja(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody QuejasAclaracionesModel quejasDTO){
         return new ResponseEntity<>(sQueja.createQueja(id_trabajador,quejasDTO),HttpStatus.CREATED);
     }
-    @PutMapping("/snrhe/trabajadores/{id_trabajador}/quejas/{id_queja}")
-    public ResponseEntity<QuejasDTO> actualizarQueja(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_queja") long id_queja,@Valid @RequestBody QuejasDTO quejasDTO){
-        QuejasDTO quejaActualizada = sQueja.updateQueja(id_trabajador,id_queja,quejasDTO);
-        return new ResponseEntity<>(quejaActualizada,HttpStatus.NO_CONTENT);
+    @PutMapping("/na2/trabajadores/{id_trabajador}/quejas")
+    public ResponseEntity<?> actualizarQueja(@PathVariable(value = "id_trabajador") long id_trabajador,@Valid @RequestBody QuejasAclaracionesModel quejasDTO){
+         sQueja.updateQueja(id_trabajador,quejasDTO);
+        return new ResponseEntity<>("Actualizada",HttpStatus.NO_CONTENT);
     }
-    @DeleteMapping("/snrhe/trabajadores/{id_trabajador}/quejas/{id_queja}")
-    public ResponseEntity<String> eliminarQueja(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_queja") long id_queja){
-        sQueja.eliminarQueja(id_trabajador,id_queja);
+    @DeleteMapping("/na2/trabajadores/{id_trabajador}/quejas/{id_queja}")
+    public ResponseEntity<?> eliminarQueja(@PathVariable(value = "id_queja") long id_queja){
+        sQueja.eliminarQueja(id_queja);
         return new ResponseEntity<>("Queja eliminada Correctamente",HttpStatus.NO_CONTENT);
     }
 }

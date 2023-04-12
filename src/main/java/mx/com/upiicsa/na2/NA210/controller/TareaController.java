@@ -1,7 +1,7 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
-import mx.com.snreh.dto.TareaDTO;
-import mx.com.snreh.service.interfaces.TareaService;
+import mx.com.upiicsa.na2.NA210.model.entity.TareaModel;
+import mx.com.upiicsa.na2.NA210.service.interfaces.ITareaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,30 +15,29 @@ import java.util.List;
 public class TareaController {
 
     @Autowired
-    private TareaService sTarea;
+    private ITareaService sTarea;
 
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/tareas/")
-    public List<TareaDTO> listarTareasTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
-        return sTarea.findTareasTrabajador(id_trabajador);
+    @GetMapping("/na2/trabajadores/{id_trabajador}/tareas/")
+    public ResponseEntity<?> listarTareasTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
+        return new ResponseEntity<>(sTarea.findTareasTrabajador(id_trabajador),HttpStatus.OK);
     }
-    @GetMapping("/snrhe/tareas/")
-    public List<TareaDTO> listarTareasTrabajador(){
-        return sTarea.findAllTareas();
+    @GetMapping("/na2/tareas/")
+    public ResponseEntity<?> listarTareasTrabajador(){
+        return new ResponseEntity<>(sTarea.findAllTareas(),HttpStatus.OK);
     }
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/tareas/{id_tarea}")
-    public ResponseEntity<TareaDTO> obtenerTareaByID(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_tarea") long id_tarea){
-        TareaDTO tareaDTO = sTarea.findTareaByID(id_trabajador,id_tarea);
-        return new ResponseEntity<>(tareaDTO, HttpStatus.OK);
+    @GetMapping("/na2/tareas/{id_tarea}")
+    public ResponseEntity<?> obtenerTareaByID(@PathVariable(value = "id_tarea") long id_tarea){;
+        return new ResponseEntity<>(sTarea.findTareaByID(id_tarea), HttpStatus.OK);
     }
 
-    @PostMapping("/snrhe/trabajadores/{id_trabajador}/tareas/")
-    public ResponseEntity<TareaDTO> asignarTarea(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody TareaDTO tareaDTO){
+    @PostMapping("/na2/trabajadores/{id_trabajador}/tareas/")
+    public ResponseEntity<?> asignarTarea(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody TareaModel tareaDTO){
         return new ResponseEntity<>(sTarea.createTarea(id_trabajador,tareaDTO),HttpStatus.CREATED);
     }
 
-    @PutMapping("/snrhe/trabajadores/{id_trabajador}/tareas/{id_tarea}")
-    public ResponseEntity<TareaDTO> actualizarTarea(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_tarea") long id_tarea,@Valid @RequestBody TareaDTO tareaDTO){
-        TareaDTO tareaActualizada = sTarea.updateTarea(id_trabajador,id_tarea,tareaDTO);
-        return new ResponseEntity<>(tareaActualizada,HttpStatus.NO_CONTENT);
+    @PutMapping("/na2/trabajadores/{id_trabajador}/tareas/{id_tarea}")
+    public ResponseEntity<?> actualizarTarea(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_tarea") long id_tarea,@Valid @RequestBody TareaModel tareaDTO){
+        sTarea.updateTarea(id_trabajador,tareaDTO);
+        return new ResponseEntity<>("tareaActualizada",HttpStatus.NO_CONTENT);
     }
 }

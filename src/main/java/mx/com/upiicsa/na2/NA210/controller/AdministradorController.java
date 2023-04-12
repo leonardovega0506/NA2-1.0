@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("snrhe/admin")
+@RequestMapping("na2/admin")
 public class AdministradorController {
 
     @Autowired

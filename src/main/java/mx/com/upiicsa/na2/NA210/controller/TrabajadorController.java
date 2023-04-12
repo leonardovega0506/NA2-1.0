@@ -1,9 +1,8 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
-import mx.com.snreh.dto.TrabajadorDTO;
-import mx.com.snreh.response.TrabajadorRespuesta;
-import mx.com.snreh.service.interfaces.TrabajadorService;
-import mx.com.snreh.util.ConstantesGlobales;
+import mx.com.upiicsa.na2.NA210.model.entity.TrabajadorModel;
+import mx.com.upiicsa.na2.NA210.response.TrabajadorRespuesta;
+import mx.com.upiicsa.na2.NA210.service.interfaces.ITrabajadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,36 +11,36 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("snrhe/trabajadores")
+@RequestMapping("/na2/trabajadores")
 public class TrabajadorController {
     @Autowired
-    private TrabajadorService sTrabajador;
+    private ITrabajadorService sTrabajador;
 
     @GetMapping
-    public TrabajadorRespuesta  listarTrabajadores(
-            @RequestParam(value = "pageNo",defaultValue = ConstantesGlobales.NUMERO_PAGINA_DEFECTO,required = false)int numeroPagina,
-            @RequestParam(value = "pageSize",defaultValue = ConstantesGlobales.MEDIDA_PAGINA_DEFECTO, required = false) int sizePagina){
-        return sTrabajador.obtenerTrabajadores(numeroPagina,sizePagina);
+    public ResponseEntity<?> listarTrabajadores(
+            @RequestParam(value = "pageNo",defaultValue = "0",required = false)int numeroPagina,
+            @RequestParam(value = "pageSize",defaultValue = "10", required = false) int sizePagina){
+        return new ResponseEntity<>(sTrabajador.obtenerTrabajadores(numeroPagina,sizePagina),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TrabajadorDTO> obtenerTrabajadorByNumero_Trabajador(@PathVariable(name = "id") long numero_trabajador){
-        return ResponseEntity.ok(sTrabajador.obtenerTrabajadorById(numero_trabajador));
+    public ResponseEntity<?> obtenerTrabajadorByNumero_Trabajador(@PathVariable(name = "id") long numero_trabajador){
+        return new ResponseEntity(sTrabajador.obtenerTrabajadorById(numero_trabajador),HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<TrabajadorDTO> crearTrabajador(@Valid @RequestBody TrabajadorDTO trabajadorDTO){
+    public ResponseEntity<?> crearTrabajador(@Valid @RequestBody TrabajadorModel trabajadorDTO){
         return new ResponseEntity<>(sTrabajador.crearTrabajador(trabajadorDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<TrabajadorDTO> actaulizarTrabajador(@Valid @RequestBody TrabajadorDTO trabajadorDTO,@PathVariable(name = "id")long numero_trabajador){
-        TrabajadorDTO trabajadroRespuesta = sTrabajador.actualizarTrabajador(trabajadorDTO,numero_trabajador);
-        return new ResponseEntity<>(trabajadroRespuesta,HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<?> actaulizarTrabajador(@Valid @RequestBody TrabajadorModel trabajadorDTO){
+         sTrabajador.actualizarTrabajador(trabajadorDTO);
+        return new ResponseEntity<>("Actualizada",HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarTrabajador(@PathVariable(name = "id") long numero_trabajador){
+    public ResponseEntity<?> eliminarTrabajador(@PathVariable(name = "id") long numero_trabajador){
         sTrabajador.eliminarTrabajador(numero_trabajador);
         return new ResponseEntity<>("Trabajador eliminado con exito",HttpStatus.OK);
     }

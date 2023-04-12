@@ -1,8 +1,7 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
-import mx.com.snreh.dto.HoraExtraDTO;
-
-import mx.com.snreh.service.interfaces.HoraExtraService;
+import mx.com.upiicsa.na2.NA210.model.entity.HoraExtraModel;
+import mx.com.upiicsa.na2.NA210.service.interfaces.IHoraExtraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +15,24 @@ import java.util.List;
 public class HoraExtraController {
 
     @Autowired
-    private HoraExtraService sHora;
+    private IHoraExtraService sHora;
 
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/horaExtra/")
-    public List<HoraExtraDTO> listarHorasExtraTrabajadorID(@PathVariable(value = "id_trabajador") long id_trabajador){
-        return sHora.findAllHoraExtraTrabajadorID(id_trabajador);
+    @GetMapping("/na2/trabajadores/{id_trabajador}/horaExtra/")
+    public ResponseEntity<?> listarHorasExtraTrabajadorID(@PathVariable(value = "id_trabajador") long id_trabajador){
+        return new ResponseEntity<>(sHora.findAllHoraExtraTrabajadorID(id_trabajador),HttpStatus.OK);
     }
 
-    @GetMapping("/snrhe/horaExtra/")
-    public List<HoraExtraDTO> listarHorasExtra(){
-        return sHora.findAllHorasExtra();
+    @GetMapping("/na2/horaExtra/")
+    public ResponseEntity<?> listarHorasExtra(){
+        return new ResponseEntity<>(sHora.findAllHorasExtra(),HttpStatus.OK);
     }
 
-    @GetMapping("/snrhe/trabajadores/{id_trabajador}/horaExtra/{id_horaExtra}")
-    public ResponseEntity<HoraExtraDTO> obtenerHoraExtra(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_horaExtra") long id_horaExtra){
-        HoraExtraDTO horaExtraDTO = sHora.findHoraExtra(id_trabajador,id_horaExtra);
-
-        return new ResponseEntity<>(horaExtraDTO, HttpStatus.OK);
+    @GetMapping("/na2/trabajadores/{id_trabajador}/horaExtra/{id_horaExtra}")
+    public ResponseEntity<?> obtenerHoraExtra(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_horaExtra") long id_horaExtra){
+        return new ResponseEntity<>(sHora.findHoraExtra(id_trabajador,id_horaExtra), HttpStatus.OK);
     }
-    @PostMapping("/snrhe/trabajadores/{id_trabajador}/horaExtra/")
-    public ResponseEntity<HoraExtraDTO> registrarHoraExtra(@PathVariable(value = "id_trabajador")  long id_trabajador, @Valid @RequestBody HoraExtraDTO horaExtraDTO){
+    @PostMapping("/na2/trabajadores/{id_trabajador}/horaExtra/")
+    public ResponseEntity<?> registrarHoraExtra(@PathVariable(value = "id_trabajador")  long id_trabajador, @Valid @RequestBody HoraExtraModel horaExtraDTO){
         return new ResponseEntity<>(sHora.createHoraExtra(id_trabajador,horaExtraDTO),HttpStatus.CREATED);
     }
 
