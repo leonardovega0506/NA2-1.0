@@ -1,6 +1,7 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
 import mx.com.upiicsa.na2.NA210.model.entity.NominaTrabajadorModel;
+import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceActaNominas;
 import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceNomina;
 import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceNominaById;
 import mx.com.upiicsa.na2.NA210.service.interfaces.INominaService;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -28,6 +30,9 @@ public class NominaController {
 
     @Autowired
     private PdfServiceNominaById sPdfDetalle;
+
+    @Autowired
+    private PdfServiceActaNominas sPDFFechas;
 
     @GetMapping("/na2/trabajadores/{id_trabajador}/nominas/")
     private  ResponseEntity<?> listarNominasTrabajadorID(@PathVariable(value = "id_trabajador") long id_trabajador){
@@ -62,6 +67,21 @@ public class NominaController {
     public void downloadNominaDetallePdf(@PathVariable(value = "id_trabajador") Long id_trabajador,@PathVariable(value = "idNomina") Long idNomina,HttpServletResponse response){
         try{
             Path file = Paths.get(sPdfDetalle.generatePlacesPdf(id_trabajador,idNomina).getAbsolutePath());
+            if (Files.exists(file)){
+                response.setContentType("application/pdf");
+                response.addHeader("Content-Disposition", "attachment; filename"+ file.getFileName());
+                Files.copy(file, response.getOutputStream());
+                response.getOutputStream().flush();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @GetMapping("/na2/nomina/pdf/")
+    public void downloadNominasFechaPdf(@RequestParam String fecha, HttpServletResponse response){
+        try{
+            LocalDate fechaString = LocalDate.parse(fecha);
+            Path file = Paths.get(sPDFFechas.generatePlacesPdf(fechaString).getAbsolutePath());
             if (Files.exists(file)){
                 response.setContentType("application/pdf");
                 response.addHeader("Content-Disposition", "attachment; filename"+ file.getFileName());

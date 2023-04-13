@@ -60,6 +60,11 @@ public class NominaServiceImpl implements INominaService {
     }
 
     @Override
+    public List<NominaTrabajadorModel> findAllNominasByFecha(LocalDate fecha) {
+        return iNomina.findByFechaNomina(fecha);
+    }
+
+    @Override
     public Optional<NominaTrabajadorModel> findNominaByID(long id_trabajador, long id_nomina) {
 
         Optional<TrabajadorModel> oTrabajador = iTrabajador.findById(id_trabajador);

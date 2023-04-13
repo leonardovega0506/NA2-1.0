@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Documento sin título</title>
+  <style type="text/css">
+#apDiv1 {
+	position: absolute;
+	left: 20px;
+	top: 31px;
+	width: 290px;
+	height: 82px;
+	z-index: 1;
+}
+#apDiv2 {
+	position: absolute;
+	left: 309px;
+	top: 32px;
+	width: 396px;
+	height: 85px;
+	z-index: 2;
+}
+#apDiv3 {
+	position: absolute;
+	left: 708px;
+	top: 31px;
+	width: 238px;
+	height: 85px;
+	z-index: 3;
+}
+#apDiv4 {
+	position: absolute;
+	left: 62px;
+	top: 180px;
+	width: 794px;
+	height: 73px;
+	z-index: 4;
+}
+#apDiv5 {
+	position: absolute;
+	left: 63px;
+	top: 254px;
+	width: 788px;
+	height: 128px;
+	z-index: 5;
+}
+#apDiv6 {
+	position: absolute;
+	left: 85px;
+	top: 528px;
+	width: 161px;
+	height: 70px;
+	z-index: 6;
+}
+#apDiv7 {
+	position: absolute;
+	left: 323px;
+	top: 523px;
+	width: 339px;
+	height: 68px;
+	z-index: 7;
+}
+</style>
+</head>
+
+<body>
+<div id="apDiv1">Logo </div>
+<div id="apDiv2">Recursos Humanos</div>
+<div id="apDiv3">
+  <p>Fecha <span th:text="${renuncia.fecha_renuncia}"></span></p>
+  <p>idVacacion</p>
+</div>
+<div id="apDiv4">Señores Empresa</div>
+<div id="apDiv5">
+  <p>Yo <span th:text="${renuncia.trabajadorModel.nombre_trabajador}"></span>, identidicado con el curp <span th:text="${renuncia.trabajadorModel.curp}"></span> me dirijo a ustedes con todo el respeto que se merecen. Esta carra tiene como objetivo presentar mi renuncia bajo el puesto <span th:text="${renuncia.trabajadorModel.puesto}"></span> que desempeño desde la fecha <span th:text="${renuncia.trabajadorModel.fechaIngreso}"></span>, ya que mis motivos son:</p>
+  <p th:text="${renuncia.motivo_renuncia}"></p>
+  <p>&nbsp;</p>
+</div>
+<div id="apDiv6">Firma Empleado	</div>
+</body>
+</html>

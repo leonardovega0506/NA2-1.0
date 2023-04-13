@@ -3,6 +3,7 @@ package mx.com.upiicsa.na2.NA210.service.interfaces;
 
 import mx.com.upiicsa.na2.NA210.model.entity.NominaTrabajadorModel;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +17,6 @@ public interface INominaService {
     void updateNomina(long id_trabajador, NominaTrabajadorModel nominaTrabajadorModel);
 
     List<NominaTrabajadorModel> findAllNominas();
+
+    List<NominaTrabajadorModel> findAllNominasByFecha(LocalDate fecha);
 }

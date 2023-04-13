@@ -1,6 +1,7 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -26,8 +27,11 @@ public class IncidenciaModel {
     @Column(name = "fecha_incidencia")
     private LocalDate fecha_incidencia;
 
+
+    private String observaciones;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador",nullable = false)
-    @JsonIgnore
+    @JsonIgnoreProperties({"renuncia","listaVacaciones","listaNominas","listaIncidencias","listaHorasExtra","listaQuejas","retardos","tareas"})
     private TrabajadorModel trabajadorModel;
 }

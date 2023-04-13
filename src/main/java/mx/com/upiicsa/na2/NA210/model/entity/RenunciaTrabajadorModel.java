@@ -2,6 +2,7 @@ package mx.com.upiicsa.na2.NA210.model.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,6 +31,6 @@ public class RenunciaTrabajadorModel {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador")
-    @JsonIgnore
+    @JsonIgnoreProperties({"renuncia","listaVacaciones","listaNominas","listaIncidencias","listaHorasExtra","listaQuejas","retardos","tareas"})
     private TrabajadorModel trabajadorModel;
 }
