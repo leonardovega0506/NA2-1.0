@@ -5,6 +5,7 @@ import mx.com.upiicsa.na2.NA210.service.interfaces.IQuejaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,11 +34,15 @@ public class QuejasController {
     public ResponseEntity<?> crearQueja(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody QuejasAclaracionesModel quejasDTO){
         return new ResponseEntity<>(sQueja.createQueja(id_trabajador,quejasDTO),HttpStatus.CREATED);
     }
+
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PutMapping("/na2/trabajadores/{id_trabajador}/quejas")
     public ResponseEntity<?> actualizarQueja(@PathVariable(value = "id_trabajador") long id_trabajador,@Valid @RequestBody QuejasAclaracionesModel quejasDTO){
          sQueja.updateQueja(id_trabajador,quejasDTO);
         return new ResponseEntity<>("Actualizada",HttpStatus.NO_CONTENT);
     }
+
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @DeleteMapping("/na2/trabajadores/{id_trabajador}/quejas/{id_queja}")
     public ResponseEntity<?> eliminarQueja(@PathVariable(value = "id_queja") long id_queja){
         sQueja.eliminarQueja(id_queja);

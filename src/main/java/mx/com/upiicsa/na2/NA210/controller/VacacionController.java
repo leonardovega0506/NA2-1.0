@@ -7,6 +7,7 @@ import mx.com.upiicsa.na2.NA210.service.interfaces.IVacacionesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -77,11 +78,14 @@ public class VacacionController {
         return new ResponseEntity<>(sVacaciones.createVacacion(id_trabajador,vacacionesDTO),HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PutMapping("/na2/vacaciones/{id_vacaciones}")
     public ResponseEntity<?> actualizarVacaciones(@Valid @RequestBody VacacionModel vacacionesDTO){
         sVacaciones.updateVacaciones(vacacionesDTO);
         return new ResponseEntity<>("vacacionActualizada",HttpStatus.NO_CONTENT);
     }
+
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @DeleteMapping("/na2/trabajadores/{id_trabajador}/vacaciones/{id_vacaciones}")
     public ResponseEntity<String> borrarVacaciones(@PathVariable(value = "id_vacaciones") long id_vacaciones){
         sVacaciones.deleteVacaciones(id_vacaciones);

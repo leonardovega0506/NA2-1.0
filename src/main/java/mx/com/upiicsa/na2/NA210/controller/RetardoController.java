@@ -6,6 +6,7 @@ import mx.com.upiicsa.na2.NA210.service.interfaces.IRetardoTrabajadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,6 +33,7 @@ public class RetardoController {
         return new ResponseEntity<>(sRetardo.findAllRetardos(),HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PostMapping("/na2/trabajadores/{id_trabajador}/retardos/")
     public ResponseEntity<?> generarRetardo(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody RetradoTrabajadorModel retardoTrabajadorDTO){
         return new ResponseEntity<>(sRetardo.createRetardo(id_trabajador,retardoTrabajadorDTO),HttpStatus.CREATED);

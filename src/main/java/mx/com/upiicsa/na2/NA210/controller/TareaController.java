@@ -5,6 +5,7 @@ import mx.com.upiicsa.na2.NA210.service.interfaces.ITareaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,11 +31,13 @@ public class TareaController {
         return new ResponseEntity<>(sTarea.findTareaByID(id_tarea), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PostMapping("/na2/trabajadores/{id_trabajador}/tareas/")
     public ResponseEntity<?> asignarTarea(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody TareaModel tareaDTO){
         return new ResponseEntity<>(sTarea.createTarea(id_trabajador,tareaDTO),HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PutMapping("/na2/trabajadores/{id_trabajador}/tareas/{id_tarea}")
     public ResponseEntity<?> actualizarTarea(@PathVariable(value = "id_trabajador") long id_trabajador,@PathVariable(value = "id_tarea") long id_tarea,@Valid @RequestBody TareaModel tareaDTO){
         sTarea.updateTarea(id_trabajador,tareaDTO);

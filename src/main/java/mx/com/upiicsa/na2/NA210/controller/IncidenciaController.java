@@ -7,6 +7,7 @@ import mx.com.upiicsa.na2.NA210.service.interfaces.IIncidenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,8 @@ public class IncidenciaController {
     public ResponseEntity<?> listarIncidencias(@PathVariable(value = "id_trabajador") Long id_trabajador){
         return new ResponseEntity<>(sIncidencia.findAllInciencias(id_trabajador),HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @GetMapping("/na2/trabajador/{id_trabajador}/incidencia/pdf/{id_incidencia}")
     public void downloadSolicutdPdf(@PathVariable Long id_trabajador,@PathVariable Long id_incidencia, HttpServletResponse response){
         try{

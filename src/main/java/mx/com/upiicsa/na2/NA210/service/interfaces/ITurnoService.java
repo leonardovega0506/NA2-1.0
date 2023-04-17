@@ -2,8 +2,6 @@ package mx.com.upiicsa.na2.NA210.service.interfaces;
 
 
 
-import mx.com.upiicsa.na2.NA210.model.entity.TurnosModel;
-
 import java.util.List;
 import java.util.Optional;
 

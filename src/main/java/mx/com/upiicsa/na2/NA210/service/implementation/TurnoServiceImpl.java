@@ -1,17 +1,12 @@
 package mx.com.upiicsa.na2.NA210.service.implementation;
 
-import mx.com.upiicsa.na2.NA210.model.entity.TurnosModel;
 import mx.com.upiicsa.na2.NA210.repository.ITurnoRepository;
 import mx.com.upiicsa.na2.NA210.service.interfaces.ITurnoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TurnoServiceImpl implements ITurnoService {
