@@ -30,7 +30,7 @@ public class SwaggerConfig {
     private ApiInfo getApiInfo() {
         return new ApiInfo(
                 "NA2",
-                "OAPI para la gestion de Recursos humanos",
+                "API para la gestion de Recursos humanos",
                 "1.0",
                 "Upiicsa",
                 new Contact("Na2", "sinURL", "sincorreo@gmail.com"),

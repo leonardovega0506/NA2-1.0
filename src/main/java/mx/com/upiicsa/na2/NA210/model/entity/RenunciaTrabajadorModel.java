@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class RenunciaTrabajadorModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_renuncia;
+    private Long id_renuncia;
 
     @Column(name = "fecha_renuncia",nullable = false)
     private LocalDate fecha_renuncia;
@@ -31,6 +31,6 @@ public class RenunciaTrabajadorModel {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador")
-    @JsonIgnoreProperties({"renuncia","listaVacaciones","listaNominas","listaIncidencias","listaHorasExtra","listaQuejas","retardos","tareas"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TrabajadorModel trabajadorModel;
 }

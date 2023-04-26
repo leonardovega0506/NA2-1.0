@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -65,6 +67,11 @@ public class NominaServiceImpl implements INominaService {
     }
 
     @Override
+    public List<NominaTrabajadorModel> findNominasByDate(LocalDate fecha) {
+        return iNomina.findByFechaNomina(fecha);
+    }
+
+    @Override
     public Optional<NominaTrabajadorModel> findNominaByID(long id_trabajador, long id_nomina) {
 
         Optional<TrabajadorModel> oTrabajador = iTrabajador.findById(id_trabajador);
@@ -87,37 +94,56 @@ public class NominaServiceImpl implements INominaService {
         Optional<TrabajadorModel> oTrabajador = iTrabajador.findById(id_trabajador);
         DecimalFormat df = new DecimalFormat("#.00");
         List<NominaTrabajadorModel> listNominas = findAllNominasTrabajador(id_trabajador);
-        NominaTrabajadorModel nominaAnterior = new NominaTrabajadorModel();
-        nominaAnterior = listNominas.get(listNominas.size()-1);
-        double sueldoNormal = oTrabajador.get().getSueldo()/2;
-        log.info("Sueldo Normal: {}",sueldoNormal);
-        double sueldoConHoraExtras = sueldoNormal + calcularHorasExtras(id_trabajador,nominaTrabajadorModel.getFechaNomina(),nominaAnterior.getFechaNomina());
-        log.info("Sueldo con Hora extra:{}",sueldoConHoraExtras);
-        double sueldoRetardos = sueldoConHoraExtras - calcularDescuenbstos(id_trabajador,nominaTrabajadorModel.getFechaNomina(),nominaAnterior.getFechaNomina());
-        log.info("Sueldo con Retardos: {}",sueldoRetardos);
-        double sueldoISR = (sueldoRetardos) - calcularISR(id_trabajador);
-        log.info("Sueldo con isr:{}",sueldoISR);
-        double sueldoNETO = (sueldoISR);
-        return Math.round(sueldoNETO * 100d);
+
+        long cuentaNominas = iNomina.countByTrabajadorModel_Id(id_trabajador);
+        if (cuentaNominas > 0) {
+            NominaTrabajadorModel nominaAnterior = new NominaTrabajadorModel();
+            nominaAnterior = listNominas.get(listNominas.size() - 1);
+            double sueldoNormal = oTrabajador.get().getSueldo() / 2;
+            log.info("Sueldo Normal: {}", sueldoNormal);
+            double sueldoConHoraExtras = sueldoNormal + calcularHorasExtras(id_trabajador, nominaTrabajadorModel.getFechaNomina(), nominaAnterior.getFechaNomina());
+            log.info("Sueldo con Hora extra:{}", sueldoConHoraExtras);
+            double sueldoRetardos = sueldoConHoraExtras - calcularDescuenbstos(id_trabajador, nominaTrabajadorModel.getFechaNomina(), nominaAnterior.getFechaNomina());
+            log.info("Sueldo con Retardos: {}", sueldoRetardos);
+            double sueldoISR = (sueldoRetardos) - calcularISR(id_trabajador);
+            log.info("Sueldo con isr:{}", sueldoISR);
+            double sueldoNETO = (sueldoISR);
+            BigDecimal bd = new BigDecimal(sueldoNETO);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        } else {
+            double sueldoNormal = oTrabajador.get().getSueldo() / 2;
+            log.info("Sueldo Normal: {}", sueldoNormal);
+            double sueldoConHoraExtras = sueldoNormal + calcularHorasExtras(id_trabajador, nominaTrabajadorModel.getFechaNomina(),oTrabajador.get().getFechaIngreso());
+            log.info("Sueldo con Hora extra:{}", sueldoConHoraExtras);
+            double sueldoRetardos = sueldoConHoraExtras - calcularDescuenbstos(id_trabajador, nominaTrabajadorModel.getFechaNomina(), oTrabajador.get().getFechaIngreso());
+            log.info("Sueldo con Retardos: {}", sueldoRetardos);
+            double sueldoISR = (sueldoRetardos) - calcularISR(id_trabajador);
+            log.info("Sueldo con isr:{}", sueldoISR);
+            double sueldoNETO = (sueldoISR);
+            BigDecimal bd = new BigDecimal(sueldoNETO);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        }
 
     }
 
-    private double calcularDescuenbstos(long id_trabajador,LocalDate fechaNomina,LocalDate fechaAnterior) {
+    private double calcularDescuenbstos(long id_trabajador, LocalDate fechaNomina, LocalDate fechaAnterior) {
         List<RetradoTrabajadorModel> retardos = sRetardo.findRetardosTrabajadorID(id_trabajador);
         double descuentoRetardo = 0;
         for (var retardo : retardos) {
-            if(retardo.getFecha_retardo().isAfter(fechaAnterior) && retardo.getFecha_retardo().isBefore(fechaNomina)){
+            if (retardo.getFechaRetardo().isAfter(fechaAnterior) && retardo.getFechaRetardo().isBefore(fechaNomina)) {
                 descuentoRetardo += retardo.getDescuento_retardo();
             }
         }
         return descuentoRetardo;
     }
 
-    private double calcularHorasExtras(long id_trabajador,LocalDate fechaNomina,LocalDate fechaanterior) {
+    private double calcularHorasExtras(long id_trabajador, LocalDate fechaNomina, LocalDate fechaanterior) {
         List<HoraExtraModel> horasExtra = sHoraExtra.findAllHoraExtraTrabajadorID(id_trabajador);
         double horasExtras = 0;
         for (var horas : horasExtra) {
-            if(horas.getFecha_HoraExtra().isAfter(fechaanterior) && horas.getFecha_HoraExtra().isBefore(fechaNomina)){
+            if (horas.getFechaHoraExtra().isAfter(fechaanterior) && horas.getFechaHoraExtra().isBefore(fechaNomina)) {
                 horasExtras += horas.getAumento_total();
             }
 
@@ -159,42 +185,42 @@ public class NominaServiceImpl implements INominaService {
 
     private double calcularISR(long id_trabajador) {
         Optional<TrabajadorModel> oTrabajador = iTrabajador.findById(id_trabajador);
-        double sueldo = oTrabajador.get().getSueldo()/2;
+        double sueldo = oTrabajador.get().getSueldo() / 2;
         double isrSinCuota = 0;
         double isr = 0;
         if (sueldo > 0.0 && sueldo < 644.58) {
             isrSinCuota = (sueldo - 0.01) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 0)/2;
+            isr = (isrSinCuota + 0) / 2;
         } else if (sueldo > 644.58 && sueldo < 5470.92) {
             isrSinCuota = (sueldo - 644.58) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 12.38)/2;
+            isr = (isrSinCuota + 12.38) / 2;
         } else if (sueldo > 5470.93 && sueldo < 9614.66) {
             isrSinCuota = (sueldo - 5470.93) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 321.26)/2;
+            isr = (isrSinCuota + 321.26) / 2;
         } else if (sueldo > 9614.67 & sueldo < 11176.62) {
             isrSinCuota = (sueldo - 8269.21) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 772.1)/2;
+            isr = (isrSinCuota + 772.1) / 2;
         } else if (sueldo > 11176.62 && sueldo < 13381.47) {
             isrSinCuota = (sueldo - 11176.62) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 1022.01)/2;
+            isr = (isrSinCuota + 1022.01) / 2;
         } else if (sueldo > 13381.48 && sueldo < 26988.50) {
             isrSinCuota = (sueldo - 13381.48) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 1417.12)/2;
+            isr = (isrSinCuota + 1417.12) / 2;
         } else if (sueldo > 26988.51 && sueldo < 42537.58) {
             isrSinCuota = (sueldo - 26988.51) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 4323.58)/2;
+            isr = (isrSinCuota + 4323.58) / 2;
         } else if (sueldo > 42537.58 && sueldo < 81211.25) {
             isrSinCuota = (sueldo - 42537.58) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 7980.73)/2;
+            isr = (isrSinCuota + 7980.73) / 2;
         } else if (sueldo > 81211.26 && sueldo < 108281.67) {
             isrSinCuota = (sueldo - 81211.26) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 19582.83)/2;
+            isr = (isrSinCuota + 19582.83) / 2;
         } else if (sueldo > 108281.68 && sueldo < 324845.01) {
             isrSinCuota = (sueldo - 108281.68) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 28245.36)/2;
+            isr = (isrSinCuota + 28245.36) / 2;
         } else if (sueldo > 324845.02) {
             isrSinCuota = (sueldo - 324845.02) * escogerISR(id_trabajador);
-            isr = (isrSinCuota + 101876.90)/2;
+            isr = (isrSinCuota + 101876.90) / 2;
         } else {
             return 0;
         }

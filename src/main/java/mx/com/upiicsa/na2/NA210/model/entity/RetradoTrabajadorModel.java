@@ -1,6 +1,7 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class RetradoTrabajadorModel {
     private long id_retardo;
 
     @Column(name = "fecha_retardo",nullable = false)
-    private LocalDate fecha_retardo;
+    private LocalDate fechaRetardo;
 
     @Column(name = "tiempo_retardo",nullable = false)
     private String tiempo_Retardo;
@@ -26,6 +27,6 @@ public class RetradoTrabajadorModel {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trabajador_id")
-    @JsonIgnore
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TrabajadorModel trabajadorModel;
 }

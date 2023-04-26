@@ -21,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "http://localhost:4200")
 public class NominaController {
 
     @Autowired
@@ -35,6 +36,7 @@ public class NominaController {
     @Autowired
     private PdfServiceActaNominas sPDFFechas;
 
+    //Falta version trabajador
     @GetMapping("/na2/trabajadores/{id_trabajador}/nominas/")
     private  ResponseEntity<?> listarNominasTrabajadorID(@PathVariable(value = "id_trabajador") long id_trabajador){
         return new ResponseEntity<>(sNomina.findAllNominasTrabajador(id_trabajador),HttpStatus.OK);
@@ -52,7 +54,7 @@ public class NominaController {
         return new ResponseEntity<>(sNomina.findAllNominas(),HttpStatus.OK);
     }
 
-
+    //Falta version -trabajador
     @GetMapping("/na2/nomina/pdf/{id_trabajador}")
     public void downloadPdf(@PathVariable(value = "id_trabajador") Long id_trabajador,HttpServletResponse response){
         try{
@@ -67,6 +69,7 @@ public class NominaController {
             e.printStackTrace();
         }
     }
+
     @GetMapping("/na2/nomina/pdf/{id_trabajador}/idNomina/{idNomina}")
     public void downloadNominaDetallePdf(@PathVariable(value = "id_trabajador") Long id_trabajador,@PathVariable(value = "idNomina") Long idNomina,HttpServletResponse response){
         try{
@@ -98,6 +101,12 @@ public class NominaController {
             e.printStackTrace();
         }
     }
+
+    @GetMapping("/na2/nomina/fecha")
+    public ResponseEntity<?> listarNominasByDate(@RequestParam String fecha){
+        return new ResponseEntity<>(sNomina.findNominasByDate(LocalDate.parse(fecha)),HttpStatus.OK);
+    }
+
 
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PostMapping("/na2/trabajadores/{id_trabajador}/nominas/")

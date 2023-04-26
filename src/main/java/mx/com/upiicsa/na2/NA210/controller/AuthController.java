@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/ananda/auth")
-@CrossOrigin("*")
+@RequestMapping("/na2/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class AuthController {
 
@@ -47,10 +47,12 @@ public class AuthController {
     @Autowired
     private IUsuarioService sUsuario;
 
+
     @GetMapping("/actual")
     public UsuarioModel obtenerUsuarioActual(Principal principal){
         return (UsuarioModel) uDetailS.loadUserByUsername(principal.getName());
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/usuarios")
@@ -58,11 +60,14 @@ public class AuthController {
         return new ResponseEntity<>(sUsuario.findAllUsuarios(),HttpStatus.OK);
     }
 
+
+
     @GetMapping("/usuario/{username}")
     public ResponseEntity<?> obtenerUsuarioByUserName(@PathVariable(value = "username") String username){
         UsuarioModel usuario = sUsuario.findUsuarioByUsername(username);
         return new ResponseEntity<>(usuario,HttpStatus.OK);
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody JwtRequest jwtRequest)throws Exception{
@@ -78,6 +83,8 @@ public class AuthController {
         String  token = this.jUtils.generateToken(userDetails);
         return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
     }
+
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/usuario")
@@ -112,6 +119,7 @@ public class AuthController {
 
     }
 
+    //Ya está
     private void authenticar(String username ,String password)throws Exception{
         try{
             authM.authenticate(new UsernamePasswordAuthenticationToken(username,password));

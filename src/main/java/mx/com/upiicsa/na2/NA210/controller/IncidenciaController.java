@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/na2/")
+@CrossOrigin(origins = "http://localhost:4200")
 public class IncidenciaController {
     @Autowired
     private IIncidenciaService sIncidencia;
@@ -26,10 +27,12 @@ public class IncidenciaController {
     @Autowired
     private PdfServiceIncidencia sPdfIncidencia;
 
+
     @GetMapping("/trabajadores/{id_trabajador}/incidencias")
     public ResponseEntity<?> listarIncidencias(@PathVariable(value = "id_trabajador") Long id_trabajador){
         return new ResponseEntity<>(sIncidencia.findAllInciencias(id_trabajador),HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @GetMapping("/na2/trabajador/{id_trabajador}/incidencia/pdf/{id_incidencia}")
@@ -47,11 +50,7 @@ public class IncidenciaController {
         }
     }
 
-    @GetMapping("trabajadores/{idTrabajador}/incidencias{id_incidencia}")
-    public ResponseEntity<?> obtenerIncidencia(@PathVariable(value = "id_trabajador") Long id_trabajador, @PathVariable(value = "id_incidencia") long id_incidencia){
-        return new ResponseEntity<>(sIncidencia.findIncidencia(id_trabajador,id_incidencia), HttpStatus.OK);
-    }
-
+    //Falta- version trabajador
     @PostMapping("{id_trabajador}")
     public ResponseEntity<?> registrarIncidencia(@PathVariable(value = "id_trabajador") Long id_trabajador, @RequestBody IncidenciaModel incidenciaDTO){
         return new ResponseEntity<>(sIncidencia.createIncidencia(id_trabajador,incidenciaDTO),HttpStatus.CREATED);

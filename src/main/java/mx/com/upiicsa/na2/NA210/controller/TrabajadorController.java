@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/na2/trabajadores")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TrabajadorController {
     @Autowired
     private ITrabajadorService sTrabajador;

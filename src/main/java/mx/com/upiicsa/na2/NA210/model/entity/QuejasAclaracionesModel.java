@@ -2,6 +2,7 @@ package mx.com.upiicsa.na2.NA210.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,8 +18,7 @@ public class QuejasAclaracionesModel {
     private long id_queja;
 
     @Column(name = "fecha_queja",nullable = false)
-    @JsonFormat(pattern = "YYYY-MM-dd")
-    private LocalDate fecha_Queja;
+    private LocalDate fechaQueja;
 
     @Column(name = "tipo_queja",nullable = false)
     private String tipo_Queja;
@@ -31,6 +31,6 @@ public class QuejasAclaracionesModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador",nullable = false)
-    @JsonIgnore
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TrabajadorModel trabajadorModel;
 }

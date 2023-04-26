@@ -32,6 +32,6 @@ public class IncidenciaModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_trabajador",nullable = false)
-    @JsonIgnoreProperties({"renuncia","listaVacaciones","listaNominas","listaIncidencias","listaHorasExtra","listaQuejas","retardos","tareas"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TrabajadorModel trabajadorModel;
 }

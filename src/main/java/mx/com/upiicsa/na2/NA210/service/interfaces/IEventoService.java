@@ -3,6 +3,7 @@ package mx.com.upiicsa.na2.NA210.service.interfaces;
 
 import mx.com.upiicsa.na2.NA210.model.entity.EventoModel;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface IEventoService {
     List<EventoModel> findAllEventos();
 
     void deleteEvento(long id_evento);
+
+    List<EventoModel> findByDate(LocalDate fecha);
 }

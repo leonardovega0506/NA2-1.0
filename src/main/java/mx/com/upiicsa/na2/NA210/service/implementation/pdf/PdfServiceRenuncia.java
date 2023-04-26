@@ -2,8 +2,10 @@ package mx.com.upiicsa.na2.NA210.service.implementation.pdf;
 
 import mx.com.upiicsa.na2.NA210.model.entity.NominaTrabajadorModel;
 import mx.com.upiicsa.na2.NA210.model.entity.RenunciaTrabajadorModel;
+import mx.com.upiicsa.na2.NA210.repository.IRenunciaRepository;
 import mx.com.upiicsa.na2.NA210.service.interfaces.INominaService;
 import mx.com.upiicsa.na2.NA210.service.interfaces.IRenunciaService;
+import mx.com.upiicsa.na2.NA210.service.interfaces.IRetardoTrabajadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ public class PdfServiceRenuncia {
     private SpringTemplateEngine springTemplateEngine;
 
     @Autowired
-    private IRenunciaService sRenuncia;
+    private IRenunciaRepository sRenuncia;
 
 
     public File generatePlacesPdf(Long id_renuncia) throws Exception{
@@ -54,7 +56,7 @@ public class PdfServiceRenuncia {
         return out.toString();
     }
     private File renderPlaceListPdf(String html) throws Exception {
-        File file = File.createTempFile("solicitud renuncia", ".pdf");
+        File file = File.createTempFile("solicitudRenuncia", ".pdf");
         OutputStream outputStream = new FileOutputStream(file);
         ITextRenderer renderer = new ITextRenderer(20f * 4f / 3f, 20);
         renderer.setDocumentFromString(html, new ClassPathResource(PDF_RESOURCES).getURL().toExternalForm());
@@ -65,7 +67,7 @@ public class PdfServiceRenuncia {
         return file;
     }
     private Context getContextPlaceListPdf(Long id_renuncia) {
-        Optional<RenunciaTrabajadorModel> oRenuncia = sRenuncia.findRenuncia(id_renuncia);
+        Optional<RenunciaTrabajadorModel> oRenuncia = sRenuncia.findById(id_renuncia);
         Context context = new Context();
         context.setVariable("renuncia", oRenuncia.get());
         return context;

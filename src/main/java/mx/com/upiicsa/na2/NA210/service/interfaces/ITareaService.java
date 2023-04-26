@@ -4,6 +4,7 @@ package mx.com.upiicsa.na2.NA210.service.interfaces;
 
 import mx.com.upiicsa.na2.NA210.model.entity.TareaModel;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,6 @@ public interface ITareaService {
     void updateTarea(long id_trabajador, TareaModel tareaModel);
 
     List<TareaModel> findAllTareas();
+
+    List<TareaModel> findTareaByDate(LocalDate fecha);
 }

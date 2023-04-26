@@ -1,6 +1,7 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class EventoModel {
     private long id;
 
     @Column(name = "fecha_evento",nullable = false)
-    private LocalDate fecha_evento;
+    private LocalDate fechEvento;
 
     @Column(name = "tipo_evento",nullable = false)
     private String tipo_evento;
@@ -28,7 +29,7 @@ public class EventoModel {
     private String cuerpo_evento;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "id_gerente", nullable = false)
     private GerenteModel gerenteModel;
 

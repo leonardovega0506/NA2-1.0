@@ -29,15 +29,15 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		try {
-			if(sUsuario.findUsuarioByUsername("adminAnanda")!=null){
-				UsuarioModel usuarioModel= sUsuario.findUsuarioByUsername("adminAnanda");
+			if(sUsuario.findUsuarioByUsername("adminTI")!=null){
+				UsuarioModel usuarioModel= sUsuario.findUsuarioByUsername("adminTI");
 				System.out.println("INICIO DE APLICACION CON USUARIO: "+usuarioModel.getNombre());
 			}
 			else{
 				UsuarioModel usuario = new UsuarioModel();
 				usuario.setNombre("AdministradorTI");
-				usuario.setUsername("12345");
-				usuario.setPassword(bcPassword.encode("4n4nd4.2023"));
+				usuario.setUsername("adminTI");
+				usuario.setPassword(bcPassword.encode("12345"));
 				usuario.setArea("TI");
 				RolModel rol = new RolModel();
 				rol.setIdRol(1L);

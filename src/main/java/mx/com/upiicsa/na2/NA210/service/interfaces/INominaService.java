@@ -2,6 +2,7 @@ package mx.com.upiicsa.na2.NA210.service.interfaces;
 
 
 import mx.com.upiicsa.na2.NA210.model.entity.NominaTrabajadorModel;
+import mx.com.upiicsa.na2.NA210.service.implementation.NominaServiceImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,4 +20,6 @@ public interface INominaService {
     List<NominaTrabajadorModel> findAllNominas();
 
     List<NominaTrabajadorModel> findAllNominasByFecha(LocalDate fecha);
+
+    List<NominaTrabajadorModel> findNominasByDate(LocalDate fecha);
 }

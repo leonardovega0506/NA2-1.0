@@ -14,11 +14,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/na2/gerentes")
+@CrossOrigin(origins = "http://localhost:4200")
 public class GerenteController {
 
     @Autowired
     private IGerenteService sGerente;
 
+    //Ya está
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @GetMapping
     public GerenteRespuesta listarGerentes(
@@ -27,18 +29,21 @@ public class GerenteController {
         return sGerente.obtenerGerentes(numeroPagina,sizePagina);
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
+    //Ya está
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerGerenteByNumero_Gerente(@PathVariable(name = "id") long numero_gerente){
         return new ResponseEntity<>(sGerente.obtenerGerenteByID(numero_gerente),HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
+    //Ya está
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<GerenteModel> crearGerentes(@Valid @RequestBody GerenteModel gerenteDTO){
+    public ResponseEntity<GerenteModel> crearGerentes(@RequestBody GerenteModel gerenteDTO){
         return new ResponseEntity<>(sGerente.crearGerente(gerenteDTO), HttpStatus.CREATED);
     }
 
+    //Ya está
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PutMapping
     public ResponseEntity<?> actualizarGerente(@Valid @RequestBody GerenteModel gerenteDTO){
@@ -46,6 +51,7 @@ public class GerenteController {
         return new ResponseEntity<>("Actualizado",HttpStatus.NO_CONTENT);
     }
 
+    //Ya está
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarGerente(@PathVariable(name = "id") long numero_gerente){

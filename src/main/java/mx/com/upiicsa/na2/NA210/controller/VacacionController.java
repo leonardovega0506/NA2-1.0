@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+@CrossOrigin(origins = "http://localhost:4200")
 public class VacacionController {
 
     @Autowired
@@ -31,6 +32,7 @@ public class VacacionController {
     @Autowired
     private PdfServiceRespuesta sPdfRespuesta;
 
+    //Falta version-trabajador
     @GetMapping("/na2/trabajadores/{id_trabajador}/vacaciones/")
     public ResponseEntity<?> listarVacacionesTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
         return new ResponseEntity<>(sVacaciones.findAllVacacionesTrabajador(id_trabajador),HttpStatus.OK);
@@ -40,10 +42,13 @@ public class VacacionController {
     public ResponseEntity<?> obtenerVacacion(@PathVariable(value = "id_vacaciones") long id_vacaciones){
         return new ResponseEntity<>(sVacaciones.findVacaciones(id_vacaciones), HttpStatus.OK);
     }
+
     @GetMapping("/na2/vacaciones/")
     public ResponseEntity<?> listarVacaciones(){
         return new ResponseEntity<>(sVacaciones.findAllVacaciones(),HttpStatus.OK);
     }
+
+
     @GetMapping("/na2/vacacion/pdf/{idVacacion}")
     public void downloadSolicutdPdf(@PathVariable Long idVacacion, HttpServletResponse response){
         try{
@@ -58,6 +63,8 @@ public class VacacionController {
             e.printStackTrace();
         }
     }
+
+    //Falta- version trabajador
     @GetMapping("/na2/vacacion/pdf/{idVacacion}/respuesta")
     public void downloadRespuestaSolicutdPdf(@PathVariable Long idVacacion, HttpServletResponse response){
         try{
@@ -73,6 +80,12 @@ public class VacacionController {
         }
     }
 
+    @GetMapping("/na2/vacacion/fecha")
+    public ResponseEntity<?> listarVacacionesFecha(@RequestParam String fecha){
+        return new ResponseEntity<>(sVacaciones.findVacacionesByDate(LocalDate.parse(fecha)),HttpStatus.OK);
+    }
+
+    //Falta version trabajador
     @PostMapping("/na2/trabajadores/{id_trabajador}/vacaciones/")
     public ResponseEntity<?> generarVacaciones(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody VacacionModel vacacionesDTO){
         return new ResponseEntity<>(sVacaciones.createVacacion(id_trabajador,vacacionesDTO),HttpStatus.CREATED);
@@ -85,10 +98,4 @@ public class VacacionController {
         return new ResponseEntity<>("vacacionActualizada",HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
-    @DeleteMapping("/na2/trabajadores/{id_trabajador}/vacaciones/{id_vacaciones}")
-    public ResponseEntity<String> borrarVacaciones(@PathVariable(value = "id_vacaciones") long id_vacaciones){
-        sVacaciones.deleteVacaciones(id_vacaciones);
-        return new ResponseEntity<>("Vacaciones eliminadas con exito",HttpStatus.NO_CONTENT);
-    }
 }
