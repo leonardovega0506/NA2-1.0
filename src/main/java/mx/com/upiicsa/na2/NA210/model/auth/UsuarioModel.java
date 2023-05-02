@@ -1,6 +1,9 @@
 package mx.com.upiicsa.na2.NA210.model.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import mx.com.upiicsa.na2.NA210.model.entity.GerenteModel;
+import mx.com.upiicsa.na2.NA210.model.entity.TrabajadorModel;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,6 +35,15 @@ public class UsuarioModel implements UserDetails {
 
     @Column(name = "usuario_disponible")
     private boolean enabled = true;
+
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(mappedBy = "usuario")
+    private GerenteModel gerente;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(mappedBy = "usuario")
+    private TrabajadorModel trabajador;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "usuario")
     @JsonIgnore

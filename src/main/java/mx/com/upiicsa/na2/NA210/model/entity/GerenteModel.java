@@ -1,6 +1,8 @@
 package mx.com.upiicsa.na2.NA210.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import mx.com.upiicsa.na2.NA210.model.auth.UsuarioModel;
 
 import javax.persistence.*;
 
@@ -40,4 +42,8 @@ public class GerenteModel {
 
     @Column(name = "puesto_gerente")
     private String puesto;
+
+
+    @OneToOne
+    private UsuarioModel usuario;
 }

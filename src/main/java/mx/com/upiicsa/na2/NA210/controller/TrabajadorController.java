@@ -1,6 +1,10 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
+import mx.com.upiicsa.na2.NA210.model.auth.UsuarioModel;
+import mx.com.upiicsa.na2.NA210.model.entity.GerenteModel;
 import mx.com.upiicsa.na2.NA210.model.entity.TrabajadorModel;
+import mx.com.upiicsa.na2.NA210.repository.ITrabajadorRepository;
+import mx.com.upiicsa.na2.NA210.repository.IUsuarioRepository;
 import mx.com.upiicsa.na2.NA210.response.TrabajadorRespuesta;
 import mx.com.upiicsa.na2.NA210.service.interfaces.ITrabajadorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/na2/trabajadores")
@@ -17,6 +22,12 @@ import javax.validation.Valid;
 public class TrabajadorController {
     @Autowired
     private ITrabajadorService sTrabajador;
+
+    @Autowired
+    private IUsuarioRepository iUsuario;
+
+    @Autowired
+    private ITrabajadorRepository iTrtabajador;
 
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @GetMapping
@@ -33,9 +44,18 @@ public class TrabajadorController {
 
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PostMapping
-    public ResponseEntity<?> crearTrabajador(@Valid @RequestBody TrabajadorModel trabajadorDTO){
+    public ResponseEntity<?> crearTrabajador(@Valid @RequestBody TrabajadorModel trabajadorDTO,@RequestParam long idUsuario){
+        Optional<UsuarioModel> oUsuario = iUsuario.findById(idUsuario);
+        trabajadorDTO.setUsuario(oUsuario.get());
         return new ResponseEntity<>(sTrabajador.crearTrabajador(trabajadorDTO), HttpStatus.CREATED);
     }
+    @GetMapping("/idUsuario/{idUsuario}")
+    public ResponseEntity<?> obtenerGerenteByIdUsuario(@PathVariable Long idUsuario){
+        Optional<TrabajadorModel> oGerente = iTrtabajador.findByUsuario_IdUsuario(idUsuario);
+        TrabajadorModel gerenteTraido = oGerente.get();
+        return new ResponseEntity<>(gerenteTraido,HttpStatus.OK);
+    }
+
 
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PutMapping

@@ -1,5 +1,6 @@
 package mx.com.upiicsa.na2.NA210.service.implementation;
 
+import lombok.extern.slf4j.Slf4j;
 import mx.com.upiicsa.na2.NA210.model.entity.TrabajadorModel;
 import mx.com.upiicsa.na2.NA210.model.entity.VacacionModel;
 import mx.com.upiicsa.na2.NA210.repository.INominaRepository;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class VacacionesServiceImpl implements IVacacionesService {
 
     @Autowired
@@ -35,13 +37,25 @@ public class VacacionesServiceImpl implements IVacacionesService {
         Optional<TrabajadorModel> oTrabajador = iTrabajador.findById(id_trabajador);
         long cuentaNominas = iNomina.countByTrabajadorModel_Id(id_trabajador);
         double mesesTrabajados = cuentaNominas / 2;
-        double diasTrabajados = mesesTrabajados * 30;
-        double sueldoDiario = oTrabajador.get().getSueldo() / diasTrabajados;
-        double primaVacacional = (sueldoDiario) * obtenerdiasVacaciones(mesesTrabajados,diasTrabajados) * .25;
-        vacacionModel.setTrabajadorModel(oTrabajador.get());
-        vacacionModel.setEstatus_vacacion("Pendiente de Aprobacion");
-        vacacionModel.setPrima_vacacional(primaVacacional);
-        return iVacaciones.save(vacacionModel);
+        log.info("Meses trabajados: {}",mesesTrabajados);
+        if(mesesTrabajados > 0) {
+            double diasTrabajados = mesesTrabajados * 30;
+            double sueldoDiario = oTrabajador.get().getSueldo() / diasTrabajados;
+            double primaVacacional = (sueldoDiario) * obtenerdiasVacaciones(mesesTrabajados, diasTrabajados) * .25;
+            vacacionModel.setTrabajadorModel(oTrabajador.get());
+            vacacionModel.setEstatus_vacacion("Pendiente de Aprobacion");
+            vacacionModel.setPrima_vacacional(primaVacacional);
+            return iVacaciones.save(vacacionModel);
+        }
+        else{
+            double diasTrabajados =  30;
+            double sueldoDiario = oTrabajador.get().getSueldo() / diasTrabajados;
+            double primaVacacional = (sueldoDiario) * obtenerdiasVacaciones(mesesTrabajados, diasTrabajados) * .25;
+            vacacionModel.setTrabajadorModel(oTrabajador.get());
+            vacacionModel.setEstatus_vacacion("Pendiente de Aprobacion");
+            vacacionModel.setPrima_vacacional(primaVacacional);
+            return iVacaciones.save(vacacionModel);
+        }
     }
 
     @Override
@@ -80,7 +94,7 @@ public class VacacionesServiceImpl implements IVacacionesService {
         double diasVacaciones = 0;
 
         if (mesesTrabajados < 12) {
-            diasVacaciones = 365 / (diasTrabajados * 12);
+            diasVacaciones = 365 / 12.0;
         } else if (mesesTrabajados > 0 && mesesTrabajados < 24) {
             diasVacaciones = 365 / (diasTrabajados * 12);
         } else if (mesesTrabajados >= 24 && mesesTrabajados < 36) {

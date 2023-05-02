@@ -2,6 +2,7 @@ package mx.com.upiicsa.na2.NA210.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import mx.com.upiicsa.na2.NA210.model.auth.UsuarioModel;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -83,4 +84,8 @@ public class TrabajadorModel {
     @JsonIgnore
     @OneToMany(mappedBy = "trabajadorModel",cascade = CascadeType.ALL,orphanRemoval = true)
     private Set<VacacionModel> listaVacaciones = new HashSet<>();
+
+    @OneToOne
+    private UsuarioModel usuario;
 }
+

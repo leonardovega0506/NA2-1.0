@@ -3,52 +3,39 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Actas de Nominas</title>
-    <style type="text/css">
-#apDiv1 {
-	position: absolute;
-	left: 16px;
-	top: 14px;
-	width: 380px;
-	height: 56px;
-	z-index: 1;
-}
-#apDiv2 {
-	position: absolute;
-	left: 440px;
-	top: 13px;
-	width: 513px;
-	height: 60px;
-	z-index: 2;
-}
-#apDiv3 {
-	position: absolute;
-	left: 46px;
-	top: 220px;
-	width: 912px;
-	height: 112px;
-	z-index: 3;
-}
-</style>
+    <link rel="stylesheet" type="text/css" href="../pdf-resources/css/nominaStyle.css" />
 </head>
-
 <body>
-<div id="apDiv1">Empresa S.A de C.V</div>
-<div id="apDiv2">
-    <p>CFDI de Nómina</p>
-    <p>Fecha:</p>
+<!--Encabezado principal-->
+<div class="intro">
+    <div class="bg-image h-100" style="background-color: transparent;">
+        <div class="mask d-flex align-items-center h-100">
+            <div class="container">
+                <br><br>
+                <!--Titulo-->
+                <h2 style="color: #000;">
+                    Lista de Nominas
+                </h2>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="apDiv3">
-    <table width="912" height="59" border="1">
+<div class="table-wrapper">
+    <table class="fl-table">
+        <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">Fecha</th>
-            <th scope="col">Monto</th>
+            <th scope="col">Nomina</th>
             <th scope="col">ISR</th>
-            <th scope="col">Codigo Trabajador</th>
             <th scope="col">Trabajador</th>
-            <th scope="col">Retardos</th>
-            <th scope="col">Sueldo</th>
+            <th scope="col">Numero Trabajador</th>
+            <th scope="col">Nomina</th>
         </tr>
+        </thead>
+        <tbody class="row_cuerpo">
         <tr th:each="nomina:${nominas}">
             <td th:text="${nomina.id_nomina}"></td>
             <td th:text="${nomina.fechaNomina}"></td>
@@ -58,7 +45,9 @@
             <td th:text="${nomina.trabajadorModel.nombre_trabajador}"></td>
             <td th:text="${nomina.nomina_trabajador}"></td>
         </tr>
+        <tbody>
     </table>
 </div>
 </body>
 </html>
+

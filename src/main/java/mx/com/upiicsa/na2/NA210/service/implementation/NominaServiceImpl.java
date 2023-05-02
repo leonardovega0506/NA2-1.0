@@ -13,6 +13,7 @@ import mx.com.upiicsa.na2.NA210.service.interfaces.INominaService;
 import mx.com.upiicsa.na2.NA210.service.interfaces.IRetardoTrabajadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,8 +24,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 public class NominaServiceImpl implements INominaService {
 
     @Autowired
@@ -52,7 +53,7 @@ public class NominaServiceImpl implements INominaService {
     }
 
     @Override
-    public List<NominaTrabajadorModel> findAllNominasTrabajador(long id_trabajador) {
+    public List<NominaTrabajadorModel> findAllNominasTrabajador(Long id_trabajador) {
         return iNomina.findByTrabajadorModel_Id(id_trabajador);
     }
 
@@ -143,10 +144,14 @@ public class NominaServiceImpl implements INominaService {
         List<HoraExtraModel> horasExtra = sHoraExtra.findAllHoraExtraTrabajadorID(id_trabajador);
         double horasExtras = 0;
         for (var horas : horasExtra) {
-            if (horas.getFechaHoraExtra().isAfter(fechaanterior) && horas.getFechaHoraExtra().isBefore(fechaNomina)) {
-                horasExtras += horas.getAumento_total();
+            if(fechaanterior!=null) {
+                if (horas.getFechaHoraExtra().isAfter(fechaanterior) && horas.getFechaHoraExtra().isBefore(fechaNomina)) {
+                    horasExtras += horas.getAumento_total();
+                }
             }
-
+            else{
+                return 0.0;
+            }
         }
         return horasExtras;
     }

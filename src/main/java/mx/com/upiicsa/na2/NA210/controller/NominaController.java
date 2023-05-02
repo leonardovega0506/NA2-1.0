@@ -1,6 +1,11 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import mx.com.upiicsa.na2.NA210.model.entity.NominaTrabajadorModel;
+import mx.com.upiicsa.na2.NA210.model.entity.TrabajadorModel;
+import mx.com.upiicsa.na2.NA210.repository.INominaRepository;
+import mx.com.upiicsa.na2.NA210.repository.ITrabajadorRepository;
+import mx.com.upiicsa.na2.NA210.service.implementation.NominaServiceImpl;
 import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceActaNominas;
 import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceNomina;
 import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceNominaById;
@@ -18,9 +23,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
+@Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 public class NominaController {
 
@@ -31,16 +38,16 @@ public class NominaController {
     private PdfServiceNomina sPDFNomina;
 
     @Autowired
+    private ITrabajadorRepository iTrabajadorRepository;
+
+    @Autowired
     private PdfServiceNominaById sPdfDetalle;
 
     @Autowired
-    private PdfServiceActaNominas sPDFFechas;
+    private INominaRepository iNomina;
 
-    //Falta version trabajador
-    @GetMapping("/na2/trabajadores/{id_trabajador}/nominas/")
-    private  ResponseEntity<?> listarNominasTrabajadorID(@PathVariable(value = "id_trabajador") long id_trabajador){
-        return new ResponseEntity<>(sNomina.findAllNominasTrabajador(id_trabajador),HttpStatus.OK);
-    }
+    @Autowired
+    private PdfServiceActaNominas sPDFFechas;
 
 
     @GetMapping("/na2/trabajadores/{id_trabajador}/nominas/{id_nomina}")
@@ -69,6 +76,14 @@ public class NominaController {
             e.printStackTrace();
         }
     }
+    @GetMapping("/na2/nominas/trabajadores/{id}")
+    public ResponseEntity<?> listarTrabajador(@PathVariable Long id){
+        log.info("El id del trabajador {}" ,id);
+        Optional<TrabajadorModel> oTrabajador = iTrabajadorRepository.findById(id);
+        TrabajadorModel rabajador = oTrabajador.get();
+        List<NominaTrabajadorModel> listanominas = sNomina.findAllNominasTrabajador(rabajador.getId());
+        return new ResponseEntity<>(listanominas,HttpStatus.OK);
+    }
 
     @GetMapping("/na2/nomina/pdf/{id_trabajador}/idNomina/{idNomina}")
     public void downloadNominaDetallePdf(@PathVariable(value = "id_trabajador") Long id_trabajador,@PathVariable(value = "idNomina") Long idNomina,HttpServletResponse response){
@@ -85,7 +100,6 @@ public class NominaController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @GetMapping("/na2/nomina/pdf/")
     public void downloadNominasFechaPdf(@RequestParam String fecha, HttpServletResponse response){
         try{

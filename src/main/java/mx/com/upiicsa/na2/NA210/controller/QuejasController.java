@@ -21,7 +21,7 @@ public class QuejasController {
 
     //Falta- version trabajador
     @GetMapping("/na2/trabajadores/{id_trabajador}/quejas/")
-    public ResponseEntity<?> listarQuejasTrabajador(@PathVariable(value = "id_trabajador") long id_trabajador){
+    public ResponseEntity<?> listarQuejasTrabajador(@PathVariable(value = "id_trabajador") Long id_trabajador){
         return new ResponseEntity<>(sQueja.findAllQuejasTrabajador(id_trabajador),HttpStatus.OK);
     }
 

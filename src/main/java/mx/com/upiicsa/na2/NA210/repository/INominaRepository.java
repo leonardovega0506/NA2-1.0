@@ -9,8 +9,7 @@ import java.util.List;
 
 @Repository
 public interface INominaRepository extends JpaRepository<NominaTrabajadorModel,Long> {
-    List<NominaTrabajadorModel> findByFechaNomina(LocalDate fechaNomina);
     List<NominaTrabajadorModel> findByTrabajadorModel_Id(Long id);
-
+    List<NominaTrabajadorModel> findByFechaNomina(LocalDate fechaNomina);
     long countByTrabajadorModel_Id(long id_trabajador);
 }

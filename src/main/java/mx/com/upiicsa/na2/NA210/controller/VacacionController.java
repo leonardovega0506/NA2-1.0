@@ -1,5 +1,7 @@
 package mx.com.upiicsa.na2.NA210.controller;
 
+import com.fasterxml.jackson.datatype.jsr310.ser.MonthDaySerializer;
+import lombok.extern.slf4j.Slf4j;
 import mx.com.upiicsa.na2.NA210.model.entity.VacacionModel;
 import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceRespuesta;
 import mx.com.upiicsa.na2.NA210.service.implementation.pdf.PdfServiceSolicitudVacaciones;
@@ -17,9 +19,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.time.temporal.ChronoUnit;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @RestController
 @RequestMapping
+@Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 public class VacacionController {
 
@@ -85,15 +91,19 @@ public class VacacionController {
         return new ResponseEntity<>(sVacaciones.findVacacionesByDate(LocalDate.parse(fecha)),HttpStatus.OK);
     }
 
-    //Falta version trabajador
     @PostMapping("/na2/trabajadores/{id_trabajador}/vacaciones/")
-    public ResponseEntity<?> generarVacaciones(@PathVariable(value = "id_trabajador") long id_trabajador, @Valid @RequestBody VacacionModel vacacionesDTO){
+    public ResponseEntity<?> generarVacaciones(@PathVariable(value = "id_trabajador") long id_trabajador, @RequestBody VacacionModel vacacionesDTO){
+        log.info("Vacaciones: {}",id_trabajador);
+        vacacionesDTO.setPrima_vacacional(0);
+        vacacionesDTO.setEstatus_vacacion("Pendiente");
+        Long dias = DAYS.between(vacacionesDTO.getFecha_fin(), vacacionesDTO.getFecha_inicio());
+        vacacionesDTO.setCantidad_dias(Math.toIntExact(dias));
         return new ResponseEntity<>(sVacaciones.createVacacion(id_trabajador,vacacionesDTO),HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMIN') OR  hasRole('GERENTE')")
     @PutMapping("/na2/vacaciones/{id_vacaciones}")
-    public ResponseEntity<?> actualizarVacaciones(@Valid @RequestBody VacacionModel vacacionesDTO){
+    public ResponseEntity<?> actualizarVacaciones( @RequestBody VacacionModel vacacionesDTO){
         sVacaciones.updateVacaciones(vacacionesDTO);
         return new ResponseEntity<>("vacacionActualizada",HttpStatus.NO_CONTENT);
     }
